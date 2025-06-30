@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Note Taker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 id="appTitle" class="app-title">MD Vibepad</h1>
+    
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>About MD Vibepad</h2>
+            <div class="about-content">
+                <h3>Development History</h3>
+                <p>MD Vibepad began as a basic Markdown note-taking application developed through Gemini CLI. It was then significantly enhanced by Cline using DeepSeek's advanced reasoning capabilities to transform it into a full-featured editor.</p>
+                <p>The Gemini version provided only core functionality, but through iterative refinement with Cline and DeepSeek, the application evolved to include:</p>
+                <ul>
+                    <li>Modern UI with theme switching</li>
+                    <li>Comprehensive Markdown reference</li>
+                    <li>Advanced table editing capabilities</li>
+                    <li>Multiple export formats</li>
+                    <li>Responsive design</li>
+                </ul>
+                <h3>Detailed Design Documentation</h3>
+                <div id="designDocumentation"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="toolbar">
+        <button id="bold" class="tooltip" data-tooltip="Bold">𝗕</button>
+        <button id="italic" class="tooltip" data-tooltip="Italic">𝐼</button>
+        <div class="dropdown">
+            <button class="dropbtn tooltip" data-tooltip="Headings">H</button>
+                <div class="dropdown-content">
+                    <a href="#" id="h1">H1</a>
+                    <a href="#" id="h2">H2</a>
+                    <a href="#" id="h3">H3</a>
+                </div>
+            </div>
+        <button id="link" class="tooltip" data-tooltip="Insert Link">🔗</button>
+        <div class="dropdown">
+            <button class="dropbtn tooltip" data-tooltip="Insert Table">◫</button>
+                <div class="dropdown-content" id="table-dropdown">
+                    <a href="#" data-cols="1">1 Column</a>
+                    <a href="#" data-cols="2">2 Columns</a>
+                    <a href="#" data-cols="3">3 Columns</a>
+                    <a href="#" data-cols="4">4 Columns</a>
+                    <a href="#" data-cols="5">5 Columns</a>
+                </div>
+            </div>
+            <button id="addRow" class="tooltip" data-tooltip="Add Table Row">➕</button>
+        <button id="deleteRow" class="tooltip" data-tooltip="Delete Table Row">➖</button>
+        <button id="cheatSheet" class="tooltip" data-tooltip="Show Markdown Cheat Sheet">📋</button>
+        <div style="margin-left: auto;"></div>
+        <button id="copyMarkdown" class="tooltip" data-tooltip="Copy Markdown">📋 MD</button>
+        <button id="copyText" class="tooltip" data-tooltip="Copy Plain Text">📝 Text</button>
+        <button id="copyHtml" class="tooltip" data-tooltip="Copy HTML">🖥️ HTML</button>
+        <button id="copyRtf" class="tooltip" data-tooltip="Copy Rich Text">📄 RTF</button>
+        <button id="save" class="tooltip" data-tooltip="Save Markdown">💾 Save</button>
+        <button id="load" class="tooltip" data-tooltip="Load Markdown File">📂 Load</button>
+        <button id="clear" class="tooltip" data-tooltip="Clear Editor">❌ Clear</button>
+        <button id="themeToggle" class="tooltip" data-tooltip="Theme">☀️</button>
+    </div>
+    
+    <!-- Markdown Cheat Sheet Modal -->
+    <div id="cheatSheetModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Markdown Cheat Sheet</h2>
+            <div class="cheat-sheet-content">
+                <h3>Basic Formatting</h3>
+                <p><strong>Bold:</strong> **text**</p>
+                <p><em>Italic:</em> *text*</p>
+                <p><del>Strikethrough:</del> ~~text~~</p>
+                
+                <h3>Headings</h3>
+                <p># H1<br>## H2<br>### H3</p>
+                
+                <h3>Lists</h3>
+                <p>Unordered:<br>- Item 1<br>- Item 2</p>
+                <p>Ordered:<br>1. First<br>2. Second</p>
+                
+                <h3>Links</h3>
+                <p>[Link text](https://example.com)</p>
+                
+                <h3>Images</h3>
+                <p>![Alt text](image.jpg)</p>
+                
+                <h3>Code</h3>
+                <p>`Inline code`</p>
+                <p>```<br>Code block<br>```</p>
+                
+                <h3>Tables</h3>
+                <p>| Header | Header |<br>| ------ | ------ |<br>| Cell   | Cell   |</p>
+            </div>
+        </div>
+    </div>
+    <div class="editor-container">
+        <textarea id="editor" placeholder="Start typing, paste or load your MD text for conversion."></textarea>
+    </div>
+    <div class="preview-container">
+        <div id="preview"></div>
+    </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Embedded design documentation
+            const designDocumentation = `
+# MD Vibepad - Development History
+
+## Overview
+MD Vibepad began as a basic Markdown note-taking application developed through Gemini CLI. It was then significantly enhanced by Cline using DeepSeek's advanced reasoning capabilities to transform it into a full-featured editor.
+
+## Development Phases
+
+### Phase 1: Gemini CLI Prototype
+- Initial implementation with basic editing capabilities
+- Minimal toolbar with formatting buttons
+- Basic Markdown preview
+
+### Phase 2: Cline/DeepSeek Enhancements
+- Added modern UI with dark/light theme toggle
+- Implemented comprehensive cheat sheet
+- Added advanced copy functionality (Markdown, Text, HTML, RTF)
+- Improved toolbar with intuitive icons and tooltips
+- Added table editing capabilities
+- Implemented file operations (Save/Load/Clear)
+- Created responsive layout with improved styling
+- Added application title with about dialog
+
+### Current Features
+- Real-time Markdown preview
+- Customizable themes (light/dark)
+- Comprehensive Markdown cheat sheet
+- Multiple export formats
+- Table creation and editing
+- Keyboard-friendly toolbar
+- Responsive design
+`;
+            
+            const designDiv = document.getElementById('designDocumentation');
+            designDiv.innerHTML = marked.parse(designDocumentation);
+            
+            // Set up modal functionality
+            document.getElementById('appTitle').addEventListener('click', () => {
+                document.getElementById('aboutModal').style.display = 'block';
+            });
+            
+            document.querySelector('#aboutModal .close').addEventListener('click', () => {
+                document.getElementById('aboutModal').style.display = 'none';
+            });
+            
+            window.addEventListener('click', (e) => {
+                const modal = document.getElementById('aboutModal');
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
